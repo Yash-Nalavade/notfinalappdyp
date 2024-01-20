@@ -26,11 +26,7 @@ class Home extends StatelessWidget {
 class Dashboard extends StatelessWidget {
   var height, width;
   static final routes = {
-    /* '/NOTICES': (context) => NoticesPage(),
-    '/ADMISSION': (context) => AdmissionPage(),
-    '/STUDENT': (context) => StudentPage(),
-    '/PLACEMENT': (context) => PlacementPage(),
-    //'/COLLEGE': (context) => CollegePage(), */
+
     '/contact': (context) => contactpage(),
     '/student': (context) => student(),
     '/cse': (context) => cse(),
@@ -168,7 +164,7 @@ class Dashboard extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                        top: 100, //35,
+                        top: 35,
                         left: 20,
                         right: 20,
                       ),
