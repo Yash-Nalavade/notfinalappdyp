@@ -1,4 +1,169 @@
-//import 'dart:js';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+import 'contactpage.dart';
+import 'student.dart';
+import 'cse.dart';
+import 'mech.dart';
+import 'civil.dart';
+import 'college.dart';
+
+class Home extends StatelessWidget {
+  const Home({Key? key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Dashboard(),
+      routes: Dashboard.routes,
+    );
+  }
+}
+
+class Dashboard extends StatelessWidget {
+  var height, width;
+  static final routes = {
+    '/contact': (context) => contactpage(),
+    '/student': (context) => student(),
+    '/cse': (context) => cse(),
+    '/mech': (context) => mech(),
+    '/civil': (context) => civil(),
+    '/college': (context) => college(),
+  };
+  List imgData = [
+    "images/notices.png",
+    "images/admission.png",
+    "images/student.png",
+    "images/placement.png",
+    "images/college.png",
+    "images/contact.png",
+  ];
+
+  List titles = [
+    "NOTICES",
+    "ADMISSION",
+    "STUDENT",
+    "PLACEMENT",
+    "COLLEGE",
+    "CONTACT",
+  ];
+  final String settingsUrl = "https://www.google.com";
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+    return Scaffold(
+      body: Container(
+        color: Colors.lightBlue[900],
+        width: width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: height * 0.26,
+              width: width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'images/dyppb.png',
+                    height: 200,
+                    width: 280,
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                width: width,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1.1,
+                    mainAxisSpacing: 25,
+                  ),
+                  itemCount: imgData.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        if (titles[index] == "CONTACT") {
+                          Navigator.pushNamed(context, '/contact');
+                        } else if (titles[index] == "STUDENT") {
+                          Navigator.pushNamed(context, '/student');
+                        } else if (titles[index] == "COLLEGE") {
+                          Navigator.pushNamed(context, '/college');
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(8), // Adjust margin here
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              spreadRadius: 1,
+                              blurRadius: 6,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Image.asset(
+                              imgData[index],
+                              width: 100,
+                              height: 100, // Adjust image height
+                            ),
+                            Text(
+                              titles[index],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+/*
+
+
+void main() {
+  runApp(Home());
+}
+
+
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -89,7 +254,7 @@ class Dashboard extends StatelessWidget {
             ),
           ),
         ],
-      ), */
+      ),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -149,9 +314,11 @@ class Dashboard extends StatelessWidget {
           ],
         ),
       ),
+      */
+
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.indigo,
+          color: Colors.lightBlue[900],
           width: width,
           child: Column(
             children: [
@@ -160,7 +327,9 @@ class Dashboard extends StatelessWidget {
                 height: height * 0.23,
                 width: width,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
@@ -180,7 +349,13 @@ class Dashboard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+
+                          Image.asset(
+                            'images/dyppb.png',
+                            height: 100, width: 280,
+                          ),
+
+                        /*  Text(
                             "DYP Polytechnic",
                             style: TextStyle(
                               fontSize: 30,
@@ -188,7 +363,7 @@ class Dashboard extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               letterSpacing: 1,
                             ),
-                          ),
+                          ), */
                           SizedBox(height: 10),
                           Text(
                             "Dashboard",
@@ -278,3 +453,5 @@ class Dashboard extends StatelessWidget {
     );
   }
 }
+
+ */

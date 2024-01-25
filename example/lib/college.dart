@@ -24,11 +24,16 @@ class college extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('College and Activities'),
+       // backgroundColor: Colors.lightBlue[700],
+
       ),
       body: ListView.builder(
+
         itemCount: colleges.length,
         itemBuilder: (context, index) {
           return Card(
+            color: Colors.lightBlue[900],
+
             child: Column(
               children: [
                 Image.network(
@@ -36,12 +41,14 @@ class college extends StatelessWidget {
                   height: 200, // Adjust the height as needed
                   width: double.infinity,
                   fit: BoxFit.cover,
+
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     colleges[index]['description']!,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+
                   ),
                 ),
               ],
