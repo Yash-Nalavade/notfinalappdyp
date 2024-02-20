@@ -294,6 +294,7 @@ class _SupaEmailAuthState extends State<SupaEmailAuth> {
             spacer(16),
             ElevatedButton(
               onPressed: () async {
+
                 try {
                   if (!_formKey.currentState!.validate()) {
                     return;
@@ -310,15 +311,34 @@ class _SupaEmailAuthState extends State<SupaEmailAuth> {
                 } catch (error) {
                   widget.onError?.call(error);
                 }
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Request Sent'),
+                      content: Text('Check your mail'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('OK'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
-              child: const Text('Send password reset email'),
+              child: const Text('Reset Password'),
             ),
             spacer(16),
             TextButton(
               onPressed: () {
+
                 setState(() {
                   _forgotPassword = false;
                 });
+
               },
               child: const Text('Back to sign in'),
             ),

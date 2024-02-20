@@ -1,5 +1,6 @@
 // asundarpichai@gmail.com
-import 'package:example/phone_sign_up.dart';
+
+import 'package:example/placement.dart';
 import 'package:example/student.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
@@ -12,8 +13,9 @@ import 'college.dart';
 import 'contactpage.dart';
 import 'cse.dart';
 import 'mech.dart';
-import 'phone_sign_in.dart';
-import './verify_phone.dart';
+import 'impdates.dart';
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +24,7 @@ void main() async {
   await Supabase.initialize(
     url: 'https://qbhwoedrlzamxvtbzlgx.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFiaHdvZWRybHphbXh2dGJ6bGd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODg4OTYyMDEsImV4cCI6MjAwNDQ3MjIwMX0.KOS3e0xj2aAfE-XsBT5pLjHjWJcWHjOBDSxjBM-6WqE',
-  );
+     );
   runApp(const MyApp());
 }
 
@@ -43,11 +45,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const SignUp(),
-        '/magic_link': (context) => const MagicLink(),
-        '/update_password': (context) => const UpdatePassword(),
-        '/phone_sign_in': (context) => const PhoneSignIn(),
-        '/phone_sign_up': (context) => const PhoneSignUp(),
-        '/verify_phone': (context) => const VerifyPhone(),
+        //'/magic_link': (context) => const MagicLink(),
+        //'/update_password': (context) => const UpdatePassword(),
+
+
         '/home': (context) => const Home(),
         '/contact': (context) => contactpage(),
         '/student': (context) => student(),
@@ -56,6 +57,8 @@ class MyApp extends StatelessWidget {
         '/civil': (context) => civil(),
         '/college': (context) => college(),
         '/signin': (context) => SignUp(),
+        '/placement': (context) => placement(),
+        '/impdates': (context) => importantDates(),
 
 
 
@@ -81,3 +84,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+

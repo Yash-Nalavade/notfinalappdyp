@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
@@ -36,3 +37,5 @@ class UpdatePassword extends StatelessWidget {
     );
   }
 }
+
+

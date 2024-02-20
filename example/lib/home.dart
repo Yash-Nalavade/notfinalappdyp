@@ -1,3 +1,4 @@
+import 'package:example/impdates.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
@@ -7,6 +8,8 @@ import 'cse.dart';
 import 'mech.dart';
 import 'civil.dart';
 import 'college.dart';
+import 'placement.dart';
+import 'impdates.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key});
@@ -30,6 +33,8 @@ class Dashboard extends StatelessWidget {
     '/mech': (context) => mech(),
     '/civil': (context) => civil(),
     '/college': (context) => college(),
+    '/placement': (context) => placement(),
+    '/impdates': (context) => importantDates(),
   };
   List imgData = [
     "images/notices.png",
@@ -41,7 +46,7 @@ class Dashboard extends StatelessWidget {
   ];
 
   List titles = [
-    "NOTICES",
+    "IMPORTANT DATES",
     "ADMISSION",
     "STUDENT",
     "PLACEMENT",
@@ -110,6 +115,12 @@ class Dashboard extends StatelessWidget {
                           Navigator.pushNamed(context, '/student');
                         } else if (titles[index] == "COLLEGE") {
                           Navigator.pushNamed(context, '/college');
+                        }
+                        else if (titles[index] == "PLACEMENT") {
+                          Navigator.pushNamed(context, '/placement');
+                        }
+                        else if (titles[index] == "IMPORTANT DATES") {
+                          Navigator.pushNamed(context, '/impdates');
                         }
                       },
                       child: Container(

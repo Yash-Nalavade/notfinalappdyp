@@ -2,6 +2,68 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'constants.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class SignUp extends StatelessWidget {
+  const SignUp({Key? key}) : super(key: key);
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    //safe area
+    return Scaffold(
+      body: ListView(
+        padding: EdgeInsets.only(top: 40.0, left: 24.0, right: 24.0, bottom: 24.0),
+        children: [
+          Image.asset(
+            "assets/logos/dyplg.jpg",
+            height: 100.0,
+            width: 100.0,
+          ),
+
+          SupaEmailAuth(
+            redirectTo: kIsWeb ? null : 'io.supabase.flutter://',
+            onSignInComplete: (response) {
+              Navigator.of(context).pushReplacementNamed('/home');
+            },
+            onSignUpComplete: (response) async {
+              Navigator.of(context).pushReplacementNamed('/signin');
+            },
+
+    metadataFields: [
+              MetaDataField(
+                prefixIcon: const Icon(Icons.phone),
+                label: 'Mobile Number',
+                key: 'mobile',
+                validator: (val) {
+                  if (val == null ||
+                      val.isEmpty ||
+                      val.length != 10 ||
+                      !RegExp(r'^[0-9]+$').hasMatch(val)) {
+                    return 'Please enter a valid ten-digit mobile number';
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ),
+          const Divider(),
+          spacer,
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+/*
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+import 'constants.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -27,10 +89,12 @@ class SignUp extends StatelessWidget {
           SupaEmailAuth(
             redirectTo: kIsWeb ? null : 'io.supabase.flutter://',
             onSignInComplete: (response) {
+
               Navigator.of(context).pushReplacementNamed('/home');
             },
             onSignUpComplete: (response) {
              // Navigator.of(context).pushReplacementNamed('/home');
+              Navigator.of(context).pushReplacementNamed('/signin');
 
 
             },
@@ -103,3 +167,5 @@ class SignUp extends StatelessWidget {
     );
   }
 }
+
+ */
