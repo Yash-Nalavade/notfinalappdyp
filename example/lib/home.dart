@@ -1,3 +1,7 @@
+//import 'dart:js';
+
+import 'dart:js';
+
 import 'package:example/impdates.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,6 +14,8 @@ import 'civil.dart';
 import 'college.dart';
 import 'placement.dart';
 import 'impdates.dart';
+import 'documents.dart';
+import 'verifyotp.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key});
@@ -35,6 +41,9 @@ class Dashboard extends StatelessWidget {
     '/college': (context) => college(),
     '/placement': (context) => placement(),
     '/impdates': (context) => importantDates(),
+    '/documents': (context) => documents(),
+    '/verification': (context) => VerificationPage(),
+
   };
   List imgData = [
     "images/notices.png",
@@ -121,6 +130,9 @@ class Dashboard extends StatelessWidget {
                         }
                         else if (titles[index] == "IMPORTANT DATES") {
                           Navigator.pushNamed(context, '/impdates');
+                        }
+                        else if (titles[index] == "ADMISSION") {
+                          Navigator.pushNamed(context, '/documents');
                         }
                       },
                       child: Container(

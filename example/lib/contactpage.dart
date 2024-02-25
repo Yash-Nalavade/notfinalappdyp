@@ -67,6 +67,16 @@ class contactpage extends StatelessWidget {
                 onTap: () => launch('https://www.facebook.com/dyppkol'),
               ),
             ),
+
+            Card(
+              color: Colors.blue[50],
+              child: ListTile(
+                leading:Icon(Icons.announcement_outlined, color: Colors.blue),
+                title: Text('Click for Admission Enquiry', style: TextStyle(color: Colors.blue)),
+                subtitle: Text('Fill Form', style: TextStyle(color: Colors.black)),
+                onTap: () => launch('https://forms.gle/BcR838AvAJJaTr7x8'),
+              ),
+            ),
             //SizedBox(height: 0.0),
             Image.asset('images/dyppb.png', height: 290,
                 width: 200,

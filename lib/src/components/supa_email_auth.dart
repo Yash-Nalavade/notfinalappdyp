@@ -335,6 +335,7 @@ class _SupaEmailAuthState extends State<SupaEmailAuth> {
             TextButton(
               onPressed: () {
 
+
                 setState(() {
                   _forgotPassword = false;
                 });
