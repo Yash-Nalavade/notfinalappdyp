@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import './home.dart';
 import './sign_in.dart';
+import 'phone_sign_in.dart';
+import 'phone_sign_up.dart';
 final Session? session = Supabase.instance.client.auth.currentSession;
 
 var a = 0;
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
               routes: {
                 '/signin': (context) => SignUp(),
                 '/home': (context) => const Home(),
+                '/phone_sign_in': (context) => const PhoneSignIn(),
+                '/phone_sign_up': (context) => const PhoneSignUp(),
               },
               onUnknownRoute: (RouteSettings settings) {
                 return MaterialPageRoute<void>(

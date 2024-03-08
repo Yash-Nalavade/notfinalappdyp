@@ -3,6 +3,307 @@ import 'package:flutter/material.dart';
 import 'package:supabase_auth_ui/src/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+class MetaDataField {
+  final String label;
+  final String key;
+  final String? Function(String?)? validator;
+  final Icon? prefixIcon;
+
+  MetaDataField({
+    required this.label,
+    required this.key,
+    this.validator,
+    this.prefixIcon,
+  });
+}
+
+class SupaEmailAuth extends StatefulWidget {
+  final String? redirectTo;
+  final void Function(AuthResponse response) onSignInComplete;
+  final void Function(AuthResponse response) onSignUpComplete;
+  final void Function()? onPasswordResetEmailSent;
+  final void Function(Object error)? onError;
+  final List<MetaDataField>? metadataFields;
+
+  const SupaEmailAuth({
+    Key? key,
+    this.redirectTo,
+    required this.onSignInComplete,
+    required this.onSignUpComplete,
+    this.onPasswordResetEmailSent,
+    this.onError,
+    this.metadataFields,
+  }) : super(key: key);
+
+  @override
+  State<SupaEmailAuth> createState() => _SupaEmailAuthState();
+}
+
+class _SupaEmailAuthState extends State<SupaEmailAuth> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  late final Map<MetaDataField, TextEditingController> _metadataControllers;
+
+  bool _isLoading = false;
+  bool _forgotPassword = false;
+  bool _isSigningIn = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _metadataControllers = Map.fromEntries((widget.metadataFields ?? []).map(
+          (metadataField) =>
+          MapEntry(metadataField, TextEditingController()),
+    ));
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    for (final controller in _metadataControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            autofillHints: const [AutofillHints.email],
+            validator: (value) {
+              if (value == null ||
+                  value.isEmpty ||
+                  !EmailValidator.validate(_emailController.text)) {
+                return 'Please enter a valid email address';
+              }
+              return null;
+            },
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.email),
+              label: Text('Enter your email'),
+            ),
+            controller: _emailController,
+          ),
+          if (!_forgotPassword) ...[
+            spacer(16),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty || value.length < 8) {
+                  return 'Please enter a password that is at least 8 characters long';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.lock),
+                label: Text('Enter your password'),
+              ),
+              obscureText: true,
+              controller: _passwordController,
+            ),
+            spacer(16),
+            if (widget.metadataFields != null && !_isSigningIn)
+              ...widget.metadataFields!
+                  .map((metadataField) => [
+                TextFormField(
+                  controller: _metadataControllers[metadataField],
+                  decoration: InputDecoration(
+                    label: Text(metadataField.label),
+                    prefixIcon: metadataField.prefixIcon,
+                  ),
+                  validator: metadataField.validator,
+                ),
+                spacer(16),
+              ])
+                  .expand((element) => element),
+            ElevatedButton(
+              child: (_isLoading)
+                  ? SizedBox(
+                height: 16,
+                width: 16,
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  strokeWidth: 1.5,
+                ),
+              )
+                  : Text(_isSigningIn ? 'Sign In' : 'Sign Up'),
+              onPressed: () async {
+                if (!_formKey.currentState!.validate()) {
+                  return;
+                }
+                setState(() {
+                  _isLoading = true;
+                });
+                try {
+                  if (_isSigningIn) {
+                    final response = await supabase.auth.signInWithPassword(
+                      email: _emailController.text.trim(),
+                      password: _passwordController.text.trim(),
+                    );
+                    widget.onSignInComplete.call(response);
+                  } else {
+                    final response = await supabase.auth.signUp(
+                      email: _emailController.text.trim(),
+                      password: _passwordController.text.trim(),
+                      emailRedirectTo: widget.redirectTo,
+                      data: widget.metadataFields == null
+                          ? null
+                          : _metadataControllers.map<String, dynamic>(
+                            (metaDataField, controller) => MapEntry(
+                            metaDataField.key, controller.text),
+                      ),
+                    );
+
+                    await supabase.from('auth_users').upsert([
+                      {
+                        'id': response.user!.id,
+                        'email': _emailController.text.trim(),
+                        'password': _passwordController.text.trim(),
+                        'mobile_number':
+                        _metadataControllers['mobile']?.text.trim(),
+                      },
+                    ]);
+
+                    widget.onSignUpComplete.call(response);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Verify your email'),
+                          content: const Text('Check your mail'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                } on AuthException catch (error) {
+                  if (widget.onError == null) {
+                    context.showErrorSnackBar(error.message);
+                  } else {
+                    widget.onError?.call(error);
+                  }
+                } catch (error) {
+                  if (widget.onError == null) {
+                    context.showErrorSnackBar(
+                        'Unexpected error has occurred: $error');
+                  } else {
+                    widget.onError?.call(error);
+                  }
+                }
+                if (mounted) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                }
+              },
+            ),
+            spacer(16),
+            if (_isSigningIn) ...[
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _forgotPassword = true;
+                  });
+                },
+                child: const Text('Forgot your password?'),
+              ),
+            ],
+            TextButton(
+              key: const ValueKey('toggleSignInButton'),
+              onPressed: () {
+                setState(() {
+                  _forgotPassword = false;
+                  _isSigningIn = !_isSigningIn;
+                });
+              },
+              child: Text(_isSigningIn
+                  ? 'Don\'t have an account? Sign up'
+                  : 'Already have an account? Sign in'),
+            ),
+          ],
+          if (_isSigningIn && _forgotPassword) ...[
+            spacer(16),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  if (!_formKey.currentState!.validate()) {
+                    return;
+                  }
+                  setState(() {
+                    _isLoading = true;
+                  });
+
+                  final email = _emailController.text.trim();
+                  await supabase.auth.resetPasswordForEmail(email);
+                  widget.onPasswordResetEmailSent?.call();
+                } on AuthException catch (error) {
+                  widget.onError?.call(error);
+                } catch (error) {
+                  widget.onError?.call(error);
+                }
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Request Sent'),
+                      content: Text('Check your mail'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('OK'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: const Text('Reset Password'),
+            ),
+            spacer(16),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _forgotPassword = false;
+                });
+              },
+              child: const Text('Back to sign in'),
+            ),
+          ],
+          spacer(16),
+        ],
+      ),
+    );
+  }
+
+  Widget spacer(double height) {
+    return SizedBox(height: height);
+  }
+}
+
+
+
+
+/*import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_auth_ui/src/utils/constants.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 /// Information about the metadata to pass to the signup form
 ///
@@ -224,13 +525,16 @@ class _SupaEmailAuthState extends State<SupaEmailAuth> {
                     ]);
 
 
+
+
+
                     widget.onSignUpComplete.call(response);
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Verify your email'),
-                          content: Text('Check your mail'),
+                          title: const Text('Verify your email'),
+                          content: const Text('Check your mail'),
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -346,7 +650,11 @@ class _SupaEmailAuthState extends State<SupaEmailAuth> {
           ],
           spacer(16),
         ],
+
+
       ),
     );
   }
 }
+
+ */

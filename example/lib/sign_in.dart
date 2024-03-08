@@ -4,6 +4,7 @@ import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+
 class SignUp extends StatelessWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -31,6 +32,8 @@ class SignUp extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/signin');
             },
 
+
+
            /* metadataFields: [
               MetaDataField(
                 prefixIcon: const Icon(Icons.phone),
@@ -54,6 +57,21 @@ class SignUp extends StatelessWidget {
 
           const Divider(),
           spacer,
+          /*SupaSocialsAuth(
+            colored: true,
+            socialProviders:  [OAuthProvider.google],
+            onSuccess: (session) {
+              Navigator.of(context).pushReplacementNamed('/home');
+            },
+          ),*/
+
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.popAndPushNamed(context, '/phone_sign_up');
+            },
+            icon: const Icon(Icons.phone),
+            label: const Text('Sign in with Phone'),
+          ),
         ],
       ),
 

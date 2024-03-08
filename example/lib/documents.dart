@@ -66,7 +66,7 @@ class documents extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Text('Cutoff'),
+                  child: Text('Cutoff', textAlign: TextAlign.center),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(

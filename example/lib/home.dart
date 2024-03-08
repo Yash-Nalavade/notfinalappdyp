@@ -1,6 +1,6 @@
 //import 'dart:js';
 
-import 'dart:js';
+
 
 import 'package:example/impdates.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,7 @@ import 'placement.dart';
 import 'impdates.dart';
 import 'documents.dart';
 import 'verifyotp.dart';
+import 'phone_sign_in.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key});
@@ -42,7 +43,7 @@ class Dashboard extends StatelessWidget {
     '/placement': (context) => placement(),
     '/impdates': (context) => importantDates(),
     '/documents': (context) => documents(),
-    '/verification': (context) => VerificationPage(),
+    '/phone_sign_in': (context) => PhoneSignIn(),
 
   };
   List imgData = [
@@ -57,9 +58,9 @@ class Dashboard extends StatelessWidget {
   List titles = [
     "IMPORTANT DATES",
     "ADMISSION",
-    "STUDENT",
+    "FEES & SCHOLARSHIPS",
     "PLACEMENT",
-    "COLLEGE",
+    "CAMPUS LIFE",
     "CONTACT",
   ];
   final String settingsUrl = "https://www.google.com";
@@ -120,9 +121,9 @@ class Dashboard extends StatelessWidget {
                       onTap: () {
                         if (titles[index] == "CONTACT") {
                           Navigator.pushNamed(context, '/contact');
-                        } else if (titles[index] == "STUDENT") {
+                        } else if (titles[index] == "FEES & SCHOLARSHIPS") {
                           Navigator.pushNamed(context, '/student');
-                        } else if (titles[index] == "COLLEGE") {
+                        } else if (titles[index] == "CAMPUS LIFE") {
                           Navigator.pushNamed(context, '/college');
                         }
                         else if (titles[index] == "PLACEMENT") {
@@ -158,9 +159,12 @@ class Dashboard extends StatelessWidget {
                             ),
                             Text(
                               titles[index],
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
+
+
                               ),
                             ),
                           ],

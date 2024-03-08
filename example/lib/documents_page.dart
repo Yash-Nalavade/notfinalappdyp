@@ -45,7 +45,7 @@ class DocumentsPage extends StatelessWidget {
                 buttonText: '  Domicile Certificate  ',
                 link:
                 'https://services.india.gov.in/service/detail/maharashtra-age-nationality-and-domicile-certificate',
-                imagePath: 'lib/assets/domecile.png',
+                imagePath: 'images/dom.jpeg',
                 headerText: 'Domicile Certificate Header',
               ),
               SizedBox(height: 20),
@@ -53,14 +53,14 @@ class DocumentsPage extends StatelessWidget {
                 buttonText: 'Nationality Certificate',
                 link:
                 'https://revenue.delhi.gov.in/revenue/nationality-certificate',
-                imagePath: 'lib/assets/nationality.png',
+                imagePath: 'images/dom.jpeg',
                 headerText: 'Nationality Certificate Header',
               ),
               SizedBox(height: 20),
               RoundedButton(
                 buttonText: '   Income Certificate   ',
                 link: 'https://revenue.delhi.gov.in/revenue/income-certificate',
-                imagePath: 'lib/assets/domecile.png',
+                imagePath: 'images/income.jpeg',
                 headerText: 'Income Certificate Header',
               ),
               SizedBox(height: 20),
@@ -68,7 +68,7 @@ class DocumentsPage extends StatelessWidget {
                 buttonText: '      SSC Certificate      ',
                 link:
                 'https://www.boardmarksheet.maharashtra.gov.in/emarksheet/',
-                imagePath: 'lib/assets/marksheet.png',
+                imagePath: 'images/tenth.jpeg',
                 headerText: 'New Certificate Header',
               ),
             ],

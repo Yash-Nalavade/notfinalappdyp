@@ -1,4 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class PhoneVerificationScreen extends StatefulWidget {
+  @override
+  _PhoneVerificationScreenState createState() => _PhoneVerificationScreenState();
+}
+
+class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
+  final _phoneNumberController = TextEditingController();
+
+  Future<void> sendVerificationCode(String phoneNumber) async {
+    final accountSid = 'AC9305219a11d6c1789277e26cf8358d12';
+    final authToken = '0e2b95bb11eeeee81406b3d69585bfa9';
+    final twilioNumber = 'your_twilio_number';
+    final twilioApiUrl = 'https://api.twilio.com/2010-04-01/Accounts/$accountSid/Messages.json';
+
+    final response = await http.post(
+      Uri.parse(twilioApiUrl),
+      headers: {
+        'Authorization': 'Basic ' + base64Encode(utf8.encode('$accountSid:$authToken')),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'To': phoneNumber,
+        'From': twilioNumber,
+        'Body': 'Your verification code is: 123456', // Replace with a dynamically generated code
+      },
+    );
+
+    if (response.statusCode == 201) {
+      print('SMS sent successfully');
+    } else {
+      print('Failed to send SMS. Status code: ${response.statusCode}, Body: ${response.body}');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Phone Verification'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _phoneNumberController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(labelText: 'Phone Number'),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                await sendVerificationCode(_phoneNumberController.text);
+              },
+              child: Text('Send Verification Code'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+/*import 'package:flutter/material.dart';
 import 'package:supabase_auth_ui/src/utils/constants.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
@@ -126,3 +196,6 @@ class _SupaPhoneAuthState extends State<SupaPhoneAuth> {
     );
   }
 }
+
+
+ */

@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   supabase_auth_ui: ^0.4.2
   sms_autofill: ^2.2.0
+  twilio_flutter: 0.2.2
 
   supabase_flutter: ^2.3.2
   marquee: ^2.0.3
